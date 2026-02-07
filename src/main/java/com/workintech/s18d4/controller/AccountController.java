@@ -53,14 +53,16 @@ public class AccountController {
         Account foundAccount = accountService.find(id);
 
         if (foundAccount != null) {
+            Long customerId;
+
             if (account.getCustomer() != null) {
-                Customer customer = customerService.find(account.getCustomer().getId());
-                if (customer != null) {
-                    account.setCustomer(customer);
-                }
+                customerId = account.getCustomer().getId();
             } else {
-                account.setCustomer(foundAccount.getCustomer());
+                customerId = foundAccount.getCustomer().getId();
             }
+
+            Customer customer = customerService.find(customerId);
+            account.setCustomer(customer);
 
             account.setId(id);
             return accountService.save(account);
